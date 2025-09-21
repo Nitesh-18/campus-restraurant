@@ -130,7 +130,7 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
                   {/* Details */}
                   <div className="flex-1">
                     <h4 className="font-medium text-gray-900">{item.name}</h4>
-                    <p className="text-sm text-gray-600">${item.price.toFixed(2)} each</p>
+                    <p className="text-sm text-gray-600">Rs. {item.price.toFixed(2)} each</p>
                     
                     {/* Quantity Controls */}
                     <div className="flex items-center space-x-2 mt-2">
@@ -169,7 +169,7 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
 
                   {/* Subtotal */}
                   <div className="text-right">
-                    <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-medium">Rs. {(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 </div>
               ))}
@@ -184,15 +184,15 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
                 <span>Subtotal</span>
-                <span>${getSubtotal().toFixed(2)}</span>
+                <span>Rs. {getSubtotal().toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Tax (8%)</span>
-                <span>${getTax().toFixed(2)}</span>
+                <span>Rs. {getTax().toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-semibold border-t pt-2">
                 <span>Total</span>
-                <span>${getTotal().toFixed(2)}</span>
+                <span>Rs. {getTotal().toFixed(2)}</span>
               </div>
             </div>
 

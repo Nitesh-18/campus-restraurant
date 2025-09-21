@@ -20,7 +20,7 @@ export default function ProductCard({ product, addToCart }: ProductCardProps) {
       price: product.price,
       image_url: product.image_url,
     });
-    toast.success(`Rs. {product.name} added to cart!`);
+    toast.success(`${product.name} added to cart!`);
   };
 
   return (
