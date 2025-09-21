@@ -20,7 +20,7 @@ export default function ProductCard({ product, addToCart }: ProductCardProps) {
       price: product.price,
       image_url: product.image_url,
     });
-    toast.success(`${product.name} added to cart!`);
+    toast.success(`Rs. {product.name} added to cart!`);
   };
 
   return (
@@ -48,9 +48,9 @@ export default function ProductCard({ product, addToCart }: ProductCardProps) {
               {product.name}
             </h3>
             <span className="text-lg font-bold text-red-600">
-              ${product.price.toFixed(2)}
+              Rs. {product.price.toFixed(2)}
             </span>
-          </div>
+          </div>  
           
           {product.description && (
             <p className="text-sm text-gray-600 line-clamp-2">
