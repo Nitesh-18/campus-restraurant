@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { CartItem, Product } from '@/types';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
+import { useAuth } from '@/hooks/useAuth';
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +14,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, addToCart }: ProductCardProps) {
+  const {profile} = useAuth();
   const handleAddToCart = () => {
     addToCart({
       id: product.id,
@@ -40,7 +42,7 @@ export default function ProductCard({ product, addToCart }: ProductCardProps) {
           </div>
         )}
       </div>
-      
+
       <CardContent className="p-4">
         <div className="space-y-2">
           <div className="flex justify-between items-start">
@@ -50,27 +52,30 @@ export default function ProductCard({ product, addToCart }: ProductCardProps) {
             <span className="text-lg font-bold text-red-600">
               Rs. {product.price.toFixed(2)}
             </span>
-          </div>  
-          
+          </div>
+
           {product.description && (
             <p className="text-sm text-gray-600 line-clamp-2">
               {product.description}
             </p>
           )}
-          
+
           <div className="flex items-center justify-between pt-2">
             <span className="text-xs text-gray-500 capitalize bg-gray-100 px-2 py-1 rounded-full">
               {product.category}
             </span>
-            
-            <Button 
-              size="sm" 
-              onClick={handleAddToCart}
-              className="hover:scale-105 transition-transform"
-            >
-              <Plus className="w-4 h-4 mr-1" />
-              Add to Cart
-            </Button> 
+
+            {(!profile || profile.role === "customer") && (
+              <Button
+                size="sm"
+                onClick={handleAddToCart}
+                className="hover:scale-105 transition-transform"
+              >
+                <Plus className="w-4 h-4 mr-1" />
+                Add to Cart
+              </Button>
+            )}
+
           </div>
         </div>
       </CardContent>

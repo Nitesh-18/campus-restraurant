@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { createSupabaseClient } from '@/lib/supabase.client';
 import { Order } from '@/types';
@@ -13,6 +14,7 @@ import { Clock, DollarSign, Package, Users } from 'lucide-react';
 
 export default function AdminPage() {
   const { user, profile, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -23,6 +25,12 @@ export default function AdminPage() {
   });
 
   const supabase = createSupabaseClient();
+
+  useEffect(() => {
+    if (!authLoading && (!user || profile?.role !== 'admin')) {
+      router.replace('/');
+    }
+  }, [authLoading, user, profile, router]);
 
   useEffect(() => {
     if (!authLoading && profile?.role === 'admin') {
@@ -124,28 +132,13 @@ export default function AdminPage() {
     }
   };
 
-  if (authLoading || loading) {
+  if (authLoading || !user || profile?.role !== 'admin') {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading admin dashboard...</p>
+          <p className="mt-4 text-gray-600">Checking admin access...</p>
         </div>
-      </div>
-    );
-  }
-
-  if (!user || profile?.role !== 'admin') {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Access Denied</h2>
-              <p className="text-gray-600">You don't have permission to access the admin dashboard.</p>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     );
   }
