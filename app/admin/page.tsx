@@ -61,7 +61,7 @@ export default function AdminPage() {
       }
 
       setOrders(data || []);
-      
+
       // Calculate stats
       const totalOrders = data?.length || 0;
       const totalRevenue = data?.reduce((sum, order) => sum + Number(order.total), 0) || 0;
@@ -161,7 +161,7 @@ export default function AdminPage() {
     }
   };
 
-  const getNextStatuses = (currentStatus: Order['status']) => {
+  const getNextStatuses = (currentStatus: Order['status']): Order['status'][] => {
     switch (currentStatus) {
       case 'new': return ['accepted', 'cancelled'];
       case 'accepted': return ['preparing', 'cancelled'];
@@ -169,6 +169,7 @@ export default function AdminPage() {
       default: return [];
     }
   };
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -191,7 +192,7 @@ export default function AdminPage() {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="flex items-center p-6">
               <div className="flex items-center">
@@ -203,7 +204,7 @@ export default function AdminPage() {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="flex items-center p-6">
               <div className="flex items-center">
@@ -215,7 +216,7 @@ export default function AdminPage() {
               </div>
             </CardContent>
           </Card>
-          
+
           <Card>
             <CardContent className="flex items-center p-6">
               <div className="flex items-center">
