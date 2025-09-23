@@ -35,16 +35,22 @@ export default function Navbar() {
             {profile?.role === 'customer' && (
               <>
                 <Link
-                  href="/"
-                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
-                >
-                  Menu
-                </Link>
-                <Link
                   href="/orders"
                   className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
                 >
                   My Orders
+                </Link>
+                <Link
+                  href="/about"
+                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                >
+                  About
+                </Link>
+                <Link
+                  href="/contact"
+                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                >
+                  Contact
                 </Link>
               </>
             )}
@@ -56,6 +62,22 @@ export default function Navbar() {
                 <Shield className="w-4 h-4" />
                 <span>Admin</span>
               </Link>
+            )}
+            {!user && (
+              <>
+                <Link
+                  href="/about"
+                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                >
+                  About
+                </Link>
+                <Link
+                  href="/contact"
+                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                >
+                  Contact
+                </Link>
+              </>
             )}
           </div>
 
@@ -133,16 +155,22 @@ export default function Navbar() {
           {profile?.role === 'customer' && (
             <>
               <Link
-                href="/"
-                className="text-gray-600 hover:text-gray-900 text-sm font-medium py-2"
-              >
-                Menu
-              </Link>
-              <Link
                 href="/orders"
                 className="text-gray-600 hover:text-gray-900 text-sm font-medium py-2"
               >
                 My Orders
+              </Link>
+              <Link
+                href="/about"
+                className="text-gray-600 hover:text-gray-900 text-sm font-medium py-2"
+              >
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className="text-gray-600 hover:text-gray-900 text-sm font-medium py-2"
+              >
+                Contact
               </Link>
             </>
           )}
@@ -153,6 +181,22 @@ export default function Navbar() {
             >
               Admin
             </Link>
+          )}
+          {!user && (
+            <>
+              <Link
+                href="/about"
+                className="text-gray-600 hover:text-gray-900 text-sm font-medium py-2"
+              >
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className="text-gray-600 hover:text-gray-900 text-sm font-medium py-2"
+              >
+                Contact
+              </Link>
+            </>
           )}
         </div>
       </div>
