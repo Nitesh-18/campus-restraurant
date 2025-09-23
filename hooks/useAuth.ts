@@ -1,22 +1,24 @@
 // 'use client';
 
-import { useEffect, useState, useRef, useMemo } from 'react';
-import { User } from '@supabase/supabase-js';
-import { Profile } from '@/types';
-import { createSupabaseClient } from '@/lib/supabase.client';
+import { useEffect, useState, useRef, useMemo } from "react";
+import { User } from "@supabase/supabase-js";
+import { Profile } from "@/types";
+import { createSupabaseClient } from "@/lib/supabase.client";
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = useRef(createSupabaseClient()).current;
+  const supabase = createSupabaseClient();
   const subscriptionRef = useRef<any>(null);
 
   useEffect(() => {
     let isMounted = true;
 
     const getInitialSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!isMounted) return;
       setUser(session?.user ?? null);
 
@@ -56,40 +58,52 @@ export function useAuth() {
   const fetchProfile = async (userId: string) => {
     try {
       const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
         .single();
 
       if (error) {
-        console.error('Error fetching profile:', error);
+        console.error("Error fetching profile:", error);
         setProfile(null);
         return;
       }
 
       setProfile(data);
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.error("Error fetching profile:", error);
       setProfile(null);
     }
   };
 
-  const signOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setProfile(null);
-    setLoading(false);
-  };
+ const signOut = async () => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("[Auth] signOut error:", error);
+    }
+  } catch (err) {
+    console.error("[Auth] signOut threw error:", err);
+  }
 
-  const isAdmin = useMemo(() => profile?.role === 'admin', [profile]);
-  const isCustomer = useMemo(() => profile?.role === 'customer', [profile]);
+  setUser(null);
+  setProfile(null);
+  setLoading(false);
+};
 
-  return useMemo(() => ({
-    user,
-    profile,
-    loading,
-    signOut,
-    isAdmin,
-    isCustomer,
-  }), [user, profile, loading, isAdmin, isCustomer]);
+
+  const isAdmin = useMemo(() => profile?.role === "admin", [profile]);
+  const isCustomer = useMemo(() => profile?.role === "customer", [profile]);
+
+  return useMemo(
+    () => ({
+      user,
+      profile,
+      loading,
+      signOut,
+      isAdmin,
+      isCustomer,
+    }),
+    [user, profile, loading, isAdmin, isCustomer]
+  );
 }

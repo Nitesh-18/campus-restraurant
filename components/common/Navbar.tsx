@@ -14,6 +14,7 @@ export default function Navbar() {
   const { user, profile, signOut, isAdmin } = useAuth();
   const { getItemCount } = useCart();
   const [showCart, setShowCart] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
   const router = useRouter();
   const itemCount = getItemCount();
 
@@ -31,23 +32,25 @@ export default function Navbar() {
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link 
-              href="/" 
-              className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
-            >
-              Menu
-            </Link>
-            {user && (
-              <Link 
-                href="/orders" 
-                className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
-              >
-                My Orders
-              </Link>
+            {profile?.role === 'customer' && (
+              <>
+                <Link
+                  href="/"
+                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                >
+                  Menu
+                </Link>
+                <Link
+                  href="/orders"
+                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                >
+                  My Orders
+                </Link>
+              </>
             )}
-            {isAdmin && (
-              <Link 
-                href="/admin" 
+            {profile?.role === 'admin' && (
+              <Link
+                href="/admin"
                 className="text-red-600 hover:text-red-700 font-medium transition-colors flex items-center space-x-1"
               >
                 <Shield className="w-4 h-4" />
@@ -89,12 +92,21 @@ export default function Navbar() {
                 <Button
                   variant="ghost"
                   size="sm"
+                  disabled={signingOut}
                   onClick={async () => {
-                    await signOut();
-                    toast.success('Signed out successfully');
-                    router.push('/');
-                  }} >
-                  Sign Out
+                    setSigningOut(true);
+                    try {
+                      await signOut();
+                      toast.success('Signed out successfully');
+                      router.push('/');
+                    } catch (err) {
+                      console.error("[Navbar] Sign out failed:", err);
+                      toast.error('Failed to sign out');
+                    } finally {
+                      setSigningOut(false);
+                    }
+                  }}>
+                  {signingOut ? 'Signing Out...' : 'Sign Out'}
                 </Button>
               </div>
             ) : (
@@ -118,23 +130,25 @@ export default function Navbar() {
       {/* Mobile Navigation */}
       <div className="md:hidden border-t">
         <div className="flex justify-around py-2">
-          <Link 
-            href="/" 
-            className="text-gray-600 hover:text-gray-900 text-sm font-medium py-2"
-          >
-            Menu
-          </Link>
-          {user && (
-            <Link 
-              href="/orders" 
-              className="text-gray-600 hover:text-gray-900 text-sm font-medium py-2"
-            >
-              Orders
-            </Link>
+          {profile?.role === 'customer' && (
+            <>
+              <Link
+                href="/"
+                className="text-gray-600 hover:text-gray-900 text-sm font-medium py-2"
+              >
+                Menu
+              </Link>
+              <Link
+                href="/orders"
+                className="text-gray-600 hover:text-gray-900 text-sm font-medium py-2"
+              >
+                My Orders
+              </Link>
+            </>
           )}
-          {isAdmin && (
-            <Link 
-              href="/admin" 
+          {profile?.role === 'admin' && (
+            <Link
+              href="/admin"
               className="text-red-600 hover:text-red-700 text-sm font-medium py-2"
             >
               Admin
