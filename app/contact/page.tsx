@@ -24,10 +24,10 @@ export default function ContactPage() {
                             <h3 className="font-semibold text-xl">Email Us</h3>
                             <p className="text-gray-600 text-base">
                                 <a
-                                    href="mailto:support@campuseats.com"
+                                    href="mailto:support@campuszomato.com"
                                     className="text-red-600 underline"
                                 >
-                                    support@campuseats.com
+                                    support@campuszomato.com
                                 </a>
                             </p>
                         </div>

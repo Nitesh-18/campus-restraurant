@@ -50,13 +50,16 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          user_id: user.id, // ✅ send logged-in user id
           items: cart.map(item => ({
-            product_id: item.id,
+            product_id: item.product_id,
             quantity: item.quantity,
             unit_price: item.price,
           })),
+
           total: getTotal(),
         }),
+        // credentials: 'include',
       });
 
       if (!response.ok) {
@@ -66,6 +69,7 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
       }
 
       clearCart();
+      toast.success(`Order placed successfully! Thank you, ${user?.full_name || 'Customer'}`);
       setCheckoutSuccess(true);
     } catch (error: any) {
       console.error('Error placing order:', error);
@@ -80,11 +84,11 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
   return (
     <>
       {/* Backdrop */}
-      <div 
+      <div
         className="fixed inset-0 bg-black bg-opacity-50 z-50"
         onClick={onClose}
       />
-      
+
       {/* Sheet */}
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-xl z-50 flex flex-col">
         {/* Header */}
@@ -109,7 +113,7 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
           ) : (
             <div className="space-y-4">
               {cart.map((item) => (
-                <div key={item.id} className="flex items-center space-x-3 bg-gray-50 rounded-lg p-3">
+                <div key={item.product_id} className="flex items-center space-x-3 bg-gray-50 rounded-lg p-3">
                   {/* Image */}
                   <div className="w-16 h-16 bg-gray-200 rounded-md overflow-hidden flex-shrink-0">
                     {item.image_url ? (
@@ -131,13 +135,13 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
                   <div className="flex-1">
                     <h4 className="font-medium text-gray-900">{item.name}</h4>
                     <p className="text-sm text-gray-600">Rs. {item.price.toFixed(2)} each</p>
-                    
+
                     {/* Quantity Controls */}
                     <div className="flex items-center space-x-2 mt-2">
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
                         disabled={item.quantity <= 1 || loading}
                         className="w-8 h-8 p-0"
                       >
@@ -149,7 +153,7 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
                         disabled={loading}
                         className="w-8 h-8 p-0"
                       >
@@ -158,7 +162,7 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(item.product_id)}
                         disabled={loading}
                         className="text-red-600 hover:text-red-700 ml-2"
                       >
@@ -198,17 +202,17 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
 
             {/* Actions */}
             <div className="space-y-2">
-              <Button 
-                className="w-full flex items-center justify-center gap-2" 
+              <Button
+                className="w-full flex items-center justify-center gap-2"
                 onClick={handleCheckout}
                 disabled={loading}
               >
                 {loading && <Loader2 className="animate-spin w-4 h-4" />}
                 {loading ? 'Placing Order...' : 'Place Order'}
               </Button>
-              <Button 
-                variant="outline" 
-                className="w-full" 
+              <Button
+                variant="outline"
+                className="w-full"
                 onClick={clearCart}
                 disabled={loading}
               >

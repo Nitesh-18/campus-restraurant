@@ -50,11 +50,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addToCart = useCallback((item: Omit<CartItem, 'quantity'>, quantity: number = 1) => {
     setCart(prevCart => {
-      const existingItem = prevCart.find(cartItem => cartItem.id === item.id);
+      const existingItem = prevCart.find(cartItem => cartItem.product_id === item.product_id);
 
       if (existingItem) {
         return prevCart.map(cartItem =>
-          cartItem.id === item.id
+          cartItem.product_id === item.product_id
             ? { ...cartItem, quantity: cartItem.quantity + quantity }
             : cartItem
         );
@@ -64,6 +64,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+
   const updateQuantity = useCallback((id: string, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(id);
@@ -72,13 +73,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     setCart(prevCart =>
       prevCart.map(item =>
-        item.id === id ? { ...item, quantity } : item
+        item.product_id === id ? { ...item, quantity } : item
       )
     );
   }, []);
 
   const removeFromCart = useCallback((id: string) => {
-    setCart(prevCart => prevCart.filter(item => item.id !== id));
+    setCart(prevCart => prevCart.filter(item => item.product_id !== id));
   }, []);
 
   const clearCart = useCallback(() => {

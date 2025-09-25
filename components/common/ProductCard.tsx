@@ -17,7 +17,7 @@ export default function ProductCard({ product, addToCart }: ProductCardProps) {
   const {profile} = useAuth();
   const handleAddToCart = () => {
     addToCart({
-      id: product.id,
+      product_id: product.id,
       name: product.name,
       price: product.price,
       image_url: product.image_url,

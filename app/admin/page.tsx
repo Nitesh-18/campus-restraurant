@@ -192,7 +192,7 @@ export default function AdminPage() {
                 <DollarSign className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                  <p className="text-2xl font-bold text-gray-900">${stats.totalRevenue.toFixed(2)}</p>
+                  <p className="text-2xl font-bold text-gray-900">Rs. {stats.totalRevenue.toFixed(2)}</p>
                 </div>
               </div>
             </CardContent>
@@ -252,7 +252,7 @@ export default function AdminPage() {
                         <Badge className={getStatusColor(order.status)}>
                           {order.status}
                         </Badge>
-                        <p className="text-lg font-bold mt-2">${Number(order.total).toFixed(2)}</p>
+                        <p className="text-lg font-bold mt-2">Rs. {Number(order.total).toFixed(2)}</p>
                       </div>
                     </div>
 
@@ -265,7 +265,7 @@ export default function AdminPage() {
                           <span>
                             {item.quantity}x {item.products?.name || 'Unknown Item'}
                           </span>
-                          <span>${(Number(item.unit_price) * item.quantity).toFixed(2)}</span>
+                          <span>Rs. {(Number(item.unit_price) * item.quantity).toFixed(2)}</span>
                         </div>
                       ))}
                     </div>

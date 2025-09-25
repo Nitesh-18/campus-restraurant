@@ -10,7 +10,7 @@ export interface Product {
 }
 
 export interface CartItem {
-  id: string;
+  product_id: string;
   name: string;
   price: number;
   quantity: number;
@@ -32,7 +32,9 @@ export interface Order {
   notes: string | null;
   created_at: string;
   updated_at: string;
-  profiles?: Profile;
+  profiles?: {
+    full_name: string | null;
+  };
   order_items?: OrderItem[];
 }
 
