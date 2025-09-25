@@ -20,7 +20,7 @@ export default function AboutPage() {
       <Card className="w-full max-w-4xl shadow-xl rounded-2xl">
         <CardHeader className="text-center space-y-2">
           <CardTitle className="text-4xl font-extrabold text-red-600">
-            About Campus Eats
+            About Campus Zomato
           </CardTitle>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Delicious food, delivered fast — crafted just for students.
@@ -31,7 +31,7 @@ export default function AboutPage() {
           {/* Intro */}
           <div className="space-y-4 text-center">
             <p>
-              Welcome to <span className="font-semibold text-red-600">Campus Eats</span>! 
+              Welcome to <span className="font-semibold text-red-600">Campus Zomato</span>! 
               We’re dedicated to bringing you the freshest meals, prepared with local 
               ingredients by passionate chefs who care about flavor and quality.
             </p>
@@ -71,7 +71,7 @@ export default function AboutPage() {
           {/* Closing line */}
           <div className="text-center">
             <p className="text-lg font-medium text-gray-800">
-              Join the <span className="text-red-600">Campus Eats</span> community today and 
+              Join the <span className="text-red-600">Campus Zomato</span> community today and 
               experience dining reimagined for student life.
             </p>
           </div>

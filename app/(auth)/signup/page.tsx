@@ -54,7 +54,7 @@ export default function SignupPage() {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Create Account</CardTitle>
           <CardDescription className="text-center">
-            Join Campus Eats and start ordering delicious food
+            Join Campus Zomato and start ordering delicious food
           </CardDescription>
         </CardHeader>
         <CardContent>

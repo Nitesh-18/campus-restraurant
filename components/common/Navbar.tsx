@@ -27,7 +27,7 @@ export default function Navbar() {
             <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">🍕</span>
             </div>
-            <span className="font-bold text-xl text-gray-900">Campus Eats</span>
+            <span className="font-bold text-xl text-gray-900">Campus Zomato</span>
           </Link>
 
           {/* Navigation Links */}
