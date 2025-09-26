@@ -278,7 +278,7 @@ export default function AdminPage() {
                       </div>
                     )}
 
-                    <div className="flex gap-2 mt-4">
+                    {/* <div className="flex gap-2 mt-4">
                       {getNextStatuses(order.status).map((status) => (
                         <Button
                           key={status}
@@ -289,7 +289,7 @@ export default function AdminPage() {
                           Mark as {status}
                         </Button>
                       ))}
-                    </div>
+                    </div> */}
                   </div>
                 ))}
               </div>
