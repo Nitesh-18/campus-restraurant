@@ -47,7 +47,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 5. Seed sample data
 6. Start development server: `npm run dev`
 
-## Supabase Schema
+<!-- ## Supabase Schema
 
 Run this SQL in your Supabase SQL editor:
 
@@ -193,7 +193,7 @@ insert into products (name, description, price, image_url, category) values
 ('Fish Tacos', 'Grilled fish with fresh salsa and lime', 13.99, 'https://images.pexels.com/photos/4958792/pexels-photo-4958792.jpeg', 'mains'),
 ('Chocolate Cake', 'Rich chocolate layer cake with frosting', 6.99, 'https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg', 'desserts'),
 ('Iced Coffee', 'Cold brew with milk and sweetener', 4.99, 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg', 'beverages');
-```
+``` -->
 
 ## Realtime Setup
 
