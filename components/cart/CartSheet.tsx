@@ -51,6 +51,7 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
         },
         body: JSON.stringify({
           user_id: user.id, // ✅ send logged-in user id
+          user_name: user.full_name,
           items: cart.map(item => ({
             product_id: item.product_id,
             quantity: item.quantity,

@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import toast from 'react-hot-toast';
-import { Clock, DollarSign, Package, Users } from 'lucide-react';
+import { Clock, IndianRupee, Package, Users } from 'lucide-react';
 
 export default function AdminPage() {
   const { user, profile, loading: authLoading } = useAuth();
@@ -189,7 +189,7 @@ export default function AdminPage() {
           <Card>
             <CardContent className="flex items-center p-6">
               <div className="flex items-center">
-                <DollarSign className="h-8 w-8 text-green-600" />
+                <IndianRupee className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">Total Revenue</p>
                   <p className="text-2xl font-bold text-gray-900">Rs. {stats.totalRevenue.toFixed(2)}</p>
