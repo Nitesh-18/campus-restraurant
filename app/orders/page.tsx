@@ -165,7 +165,7 @@ export default function OrdersPage() {
                       <Badge className={getStatusColor(order.status)}>
                         {order.status}
                       </Badge>
-                      <p className="text-lg font-bold mt-2">${Number(order.total).toFixed(2)}</p>
+                      <p className="text-lg font-bold mt-2">Rs. {Number(order.total).toFixed(2)}</p>
                     </div>
                   </div>
                   <p className="text-sm text-gray-600 mt-2">
@@ -198,13 +198,13 @@ export default function OrdersPage() {
                         <div className="flex-1">
                           <p className="font-medium">{item.products?.name || 'Unknown Item'}</p>
                           <p className="text-sm text-gray-600">
-                            ${Number(item.unit_price).toFixed(2)} each
+                            Rs. {Number(item.unit_price).toFixed(2)} each
                           </p>
                         </div>
                         <div className="text-right">
                           <p className="font-medium">×{item.quantity}</p>
                           <p className="text-sm text-gray-600">
-                            ${(Number(item.unit_price) * item.quantity).toFixed(2)}
+                            Rs. {(Number(item.unit_price) * item.quantity).toFixed(2)}
                           </p>
                         </div>
                       </div>
