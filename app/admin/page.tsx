@@ -244,9 +244,9 @@ export default function AdminPage() {
                         <p className="text-sm text-gray-600">
                           Customer: {order.profiles?.full_name || 'Unknown'}
                         </p>
-                        <p className="text-sm text-gray-600">
+                        {/* <p className="text-sm text-gray-600">
                           {new Date(order.created_at).toLocaleString()}
-                        </p>
+                        </p> */}
                       </div>
                       <div className="text-right">
                         <Badge className={getStatusColor(order.status)}>
