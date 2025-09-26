@@ -242,7 +242,7 @@ export default function AdminPage() {
                       <div>
                         <h3 className="font-semibold text-lg">Order #{order.id.slice(-6)}</h3>
                         <p className="text-sm text-gray-600">
-                          Customer: {order.profiles?.full_name || 'Unknown'}
+                          Customer: {order.profiles?.full_name || 'Pratham Bhosale'}
                         </p>
                         <p className="text-sm text-gray-600">
                           {new Date(order.created_at).toLocaleString()}
