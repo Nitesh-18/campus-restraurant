@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       .from("orders")
       .insert({
         user_id: orderData.user_id, // nullable for guest
-        user_name: user.full_name,
+        user_name: orderData.full_name,
         total: orderData.total,
         notes: orderData.notes || null,
         status: "new",
