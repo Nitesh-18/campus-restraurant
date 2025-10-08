@@ -14,12 +14,21 @@ export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createSupabaseClient();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate mobile number (only digits and 10 characters)
+    const mobileRegex = /^[0-9]{10}$/;
+    if (!mobileRegex.test(mobileNumber)) {
+      toast.error('Please enter a valid 10-digit mobile number');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -29,8 +38,9 @@ export default function SignupPage() {
         options: {
           data: {
             full_name: fullName,
-          }
-        }
+            mobile_number: mobileNumber,
+          },
+        },
       });
 
       if (error) {
@@ -38,7 +48,13 @@ export default function SignupPage() {
         return;
       }
 
-      toast.success('Account created successfully!');
+      // ✅ Success message for the customer
+      toast.success(`Welcome ${fullName}! 🎉 Your account has been created successfully.`);
+
+      // Optional message for the admin console/log
+      console.log(`New user signed up: ${fullName} (${mobileNumber})`);
+
+      // Redirect to home or login page
       router.push('/');
       router.refresh();
     } catch (error) {
@@ -70,6 +86,23 @@ export default function SignupPage() {
                 required
               />
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="mobileNumber">Mobile Number</Label>
+              <Input
+                id="mobileNumber"
+                type="text"
+                placeholder="Enter 10-digit mobile number"
+                value={mobileNumber}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9]/g, '');
+                  setMobileNumber(value);
+                }}
+                maxLength={10}
+                required
+              />
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -81,6 +114,7 @@ export default function SignupPage() {
                 required
               />
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
@@ -93,11 +127,12 @@ export default function SignupPage() {
                 minLength={6}
               />
             </div>
+
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Creating Account...' : 'Create Account'}
             </Button>
           </form>
-          
+
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{' '}
