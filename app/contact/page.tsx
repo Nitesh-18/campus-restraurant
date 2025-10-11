@@ -17,7 +17,7 @@ export default function ContactPage() {
                 </CardHeader>
 
                 <CardContent className="space-y-10 text-gray-700 text-lg">
-                    {/* Contact Options */}
+                    {/* Contact Options */}000000
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                         <div className="flex flex-col items-center space-y-3">
                             <Mail className="h-10 w-10 text-red-600" />
