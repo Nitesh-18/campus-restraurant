@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase.server';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, full_name, phone_number } = body || {};
+  const { email, full_name, phone_number, address } = body || {};
 
     if (!email) {
       return NextResponse.json({ error: 'email is required' }, { status: 400 });
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     // Upsert profile row using service role (bypasses RLS)
     const { error: upsertError } = await supabaseAdmin
       .from('profiles')
-      .upsert({ id: user.id, full_name: full_name ?? null, phone_number: phone_number ?? null });
+      .upsert({ id: user.id, full_name: full_name ?? null, phone_number: phone_number ?? null, address: address ?? null });
 
     if (upsertError) {
       console.error('profiles upsert error:', upsertError);

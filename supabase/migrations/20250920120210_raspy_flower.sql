@@ -28,6 +28,7 @@ create table if not exists profiles (
   id uuid references auth.users on delete cascade primary key,
   full_name text,
   phone_number text,
+  address text,
   role text default 'customer' check (role in ('customer', 'admin')),
   created_at timestamptz default now()
 );

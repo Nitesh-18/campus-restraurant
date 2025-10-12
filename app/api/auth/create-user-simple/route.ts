@@ -4,7 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase.server';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, password, full_name, phone_number } = body || {};
+  const { email, password, full_name, phone_number, address } = body || {};
 
     if (!email || !password) {
       return NextResponse.json({ error: 'email and password are required' }, { status: 400 });
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     const { data: createData, error: createError } = await supabaseAdmin.auth.admin.createUser({
       email,
       password,
-      user_metadata: { full_name, phone_number },
+      user_metadata: { full_name, phone_number, address },
       email_confirm: true,
     } as any);
 
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     if (createdUser?.id) {
       const { error: upsertError } = await supabaseAdmin
         .from('profiles')
-        .upsert({ id: createdUser.id, full_name: full_name ?? null, phone_number: phone_number ?? null });
+        .upsert({ id: createdUser.id, full_name: full_name ?? null, phone_number: phone_number ?? null, address: address ?? null });
 
       if (upsertError) {
         console.error('profiles upsert error:', upsertError);

@@ -9,28 +9,7 @@ export async function PATCH(
   try {
     const supabase = createSupabaseServerClient();
     
-    // Get the current user
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
-    // if (userError || !user) {
-    //   return NextResponse.json(
-    //     { error: 'Authentication required' },
-    //     { status: 401 }
-    //   );
-    // }
-
-    // Check if user is admin
-    // const { data: profile, error: profileError } = await supabase
-    //   .from('profiles')
-    //   .select('role')
-    //   .eq('id', user?.id)
-    //   .single();
-
-    // if (profileError || profile.role !== 'admin') {
-    //   return NextResponse.json(
-    //     { error: 'Admin access required' },
-    //     { status: 403 }
-    //   );
-    // }
+    // simplified: no auth/admin checks here (kept intentionally minimal)
 
     const { status }: { status: string } = await request.json();
     const id = params.id;

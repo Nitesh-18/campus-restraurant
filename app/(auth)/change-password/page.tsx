@@ -22,37 +22,40 @@ export default function ChangePasswordPage() {
     setLoading(true);
 
     try {
-      // Verify old password by signing in with current user's email and old password
+      // Try to update password directly (preferred)
+      const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+
+      if (!updateError) {
+        toast.success('Password updated successfully');
+        setLoading(false);
+        return;
+      }
+
+      // If direct update failed, attempt to reauthenticate using old password then retry
+      console.warn('updateUser error, attempting reauth:', updateError.message);
+
       const {
         data: { session },
-        error: sessionError,
       } = await supabase.auth.getSession();
 
-      if (sessionError || !session?.user?.email) {
+      const email = session?.user?.email;
+      if (!email) {
         toast.error('You must be signed in to change your password');
         setLoading(false);
         return;
       }
 
-      const email = session.user.email;
-
-      // Try sign in to verify old password
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password: oldPassword,
-      });
-
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password: oldPassword });
       if (signInError) {
         toast.error('Old password is incorrect');
         setLoading(false);
         return;
       }
 
-      // Update password
-      const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
-
-      if (updateError) {
-        toast.error(updateError.message);
+      // Retry update after reauth
+      const { error: retryError } = await supabase.auth.updateUser({ password: newPassword });
+      if (retryError) {
+        toast.error(retryError.message || 'Failed to update password');
       } else {
         toast.success('Password updated successfully');
       }

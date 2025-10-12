@@ -20,9 +20,10 @@ export interface CartItem {
 export interface Profile {
   id: string;
   full_name: string | null;
-  phone_number: string;
-  role: 'customer' | 'admin';
-  created_at: string;
+  phone_number?: string | null;
+  address?: string | null;
+  role?: 'customer' | 'admin';
+  created_at?: string;
 }
 
 export interface Order {
@@ -33,8 +34,18 @@ export interface Order {
   notes: string | null;
   created_at: string;
   updated_at: string;
+  user_details?: {
+    id?: string;
+    full_name?: string | null;
+    phone_number?: string | null;
+    address?: string | null;
+  } | null;
   profiles?: {
+    id?: string;
     full_name: string | null;
+    phone_number?: string | null;
+    address?: string | null;
+    role?: 'customer' | 'admin';
   };
   order_items?: OrderItem[];
 }
@@ -57,6 +68,9 @@ export interface CreateOrderRequest {
   }[];
   total: number;
   notes?: string;
+  user_id?: string | null;
+  full_name?: string | null;
+  address?: string | null;
 }
 
 export interface UpdateOrderStatusRequest {

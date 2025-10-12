@@ -109,7 +109,17 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                <div className="relative" tabIndex={0} onBlur={() => setShowUserMenu(false)}>
+                <div
+                  className="relative"
+                  tabIndex={0}
+                  onBlur={(e) => {
+                    // close menu only when focus leaves the container entirely
+                    const related = (e as any).relatedTarget as HTMLElement | null;
+                    if (!related || !(e.currentTarget as HTMLElement).contains(related)) {
+                      setShowUserMenu(false);
+                    }
+                  }}
+                >
                   <button
                     aria-label="User menu"
                     onClick={() => setShowUserMenu((s) => !s)}
@@ -122,16 +132,19 @@ export default function Navbar() {
                     <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-50">
                       <ul>
                         <li>
-                          <Link href="/change-password" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Change Password</Link>
+                          <Link href="/forgot-password" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Forgot  Password</Link>
                         </li>
                         <li>
                           <button
                             className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                            onClick={async () => {
+                            // use onMouseDown so the action runs before the container loses focus (blur)
+                            onMouseDown={async (ev) => {
+                              ev.preventDefault();
                               setSigningOut(true);
                               try {
                                 await signOut();
                                 toast.success('Signed out successfully');
+                                setShowUserMenu(false);
                                 router.push('/');
                               } catch (err) {
                                 console.error("[Navbar] Sign out failed:", err);

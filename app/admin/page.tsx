@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import toast from 'react-hot-toast';
 import { Clock, IndianRupee, Package, Users } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 
 export default function AdminPage() {
   const { user, profile, loading: authLoading } = useAuth();
@@ -49,7 +50,9 @@ export default function AdminPage() {
           profiles (
             id,
             full_name,
-            role
+            role,
+            phone_number,
+            address
           ),
           order_items (
             id,
@@ -130,6 +133,22 @@ export default function AdminPage() {
       console.error('Error updating order status:', error);
       toast.error('Failed to update order status');
     }
+  };
+
+  // Dialog state for confirming status changes
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingOrder, setPendingOrder] = useState<{ id: string; status: Order['status'] } | null>(null);
+
+  const openConfirm = (orderId: string, status: Order['status']) => {
+    setPendingOrder({ id: orderId, status });
+    setConfirmOpen(true);
+  };
+
+  const confirmChange = async () => {
+    if (!pendingOrder) return;
+    await updateOrderStatus(pendingOrder.id, pendingOrder.status);
+    setConfirmOpen(false);
+    setPendingOrder(null);
   };
 
   if (authLoading || !user || profile?.role !== 'admin') {
@@ -221,6 +240,24 @@ export default function AdminPage() {
               </div>
             </CardContent>
           </Card>
+          {/* Confirm dialog for status changes */}
+          <Dialog open={confirmOpen} onOpenChange={(open) => {
+            setConfirmOpen(open);
+            if (!open) setPendingOrder(null);
+          }}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Confirm status change</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to mark order #{pendingOrder?.id.slice(-6)} as {pendingOrder?.status}?
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button variant="ghost" onClick={() => setConfirmOpen(false)}>Cancel</Button>
+                <Button onClick={confirmChange}>{pendingOrder ? `Mark as ${pendingOrder.status}` : 'Confirm'}</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Orders List */}
@@ -242,8 +279,10 @@ export default function AdminPage() {
                       <div>
                         <h3 className="font-semibold text-lg">Order #{order.id.slice(-6)}</h3>
                         <p className="text-sm text-gray-600">
-                          Customer: {order.profiles?.full_name || 'Pratham Bhosale'}
+                          Customer: {order.user_details?.full_name || ''}
                         </p>
+                        <p className="text-sm text-gray-600">{order.user_details?.phone_number ? `Mobile: ${order.user_details?.phone_number}` : ''}</p>
+                        <p className="text-sm text-gray-600">{order.user_details?.address ? `Address: ${order.user_details?.address}` : ''}</p>
                         <p className="text-sm text-gray-600">
                           {new Date(order.created_at).toLocaleString()}
                         </p>
@@ -284,7 +323,7 @@ export default function AdminPage() {
                           key={status}
                           variant={status === 'cancelled' ? 'destructive' : 'default'}
                           size="sm"
-                          onClick={() => updateOrderStatus(order.id, status)}
+                          onClick={() => openConfirm(order.id, status)}
                         >
                           Mark as {status}
                         </Button>

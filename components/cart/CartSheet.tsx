@@ -15,7 +15,7 @@ interface CartSheetProps {
 
 export default function CartSheet({ open, onClose }: CartSheetProps) {
   const { cart, updateQuantity, removeFromCart, clearCart, getSubtotal, getTax, getTotal } = useCart();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [loading, setLoading] = useState(false);
   const [checkoutSuccess, setCheckoutSuccess] = useState(false);
 
@@ -51,11 +51,13 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
         },
         body: JSON.stringify({
           user_id: user.id, // ✅ send logged-in user id
-          user_name: user.full_name,
+          user_name: profile?.full_name ?? user.email,
+          phone_number: profile?.phone_number ?? null,
           items: cart.map(item => ({
             product_id: item.product_id,
             quantity: item.quantity,
             unit_price: item.price,
+            phone_number: profile?.phone_number ?? null,
           })),
 
           total: getTotal(),
@@ -69,8 +71,8 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
         throw new Error(errorMsg);
       }
 
-      clearCart();
-      toast.success(`Order placed successfully! Thank you, ${user?.full_name || 'Customer'}`);
+  clearCart();
+  toast.success(`Order placed successfully! Thank you, ${profile?.full_name || 'Customer'}`);
       setCheckoutSuccess(true);
     } catch (error: any) {
       console.error('Error placing order:', error);

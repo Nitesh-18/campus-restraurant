@@ -15,6 +15,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createSupabaseClient();
@@ -36,7 +37,7 @@ export default function SignupPage() {
       const res = await fetch('/api/auth/create-user-simple', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, full_name: fullName, phone_number: phoneNumber }),
+        body: JSON.stringify({ email, password, full_name: fullName, phone_number: phoneNumber, address }),
       });
 
       const json = await res.json();
@@ -105,6 +106,18 @@ export default function SignupPage() {
                   setPhoneNumber(value);
                 }}
                 maxLength={10}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="address">Address</Label>
+              <Input
+                id="address"
+                type="text"
+                placeholder="Enter your address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
                 required
               />
             </div>
