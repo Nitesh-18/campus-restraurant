@@ -27,6 +27,7 @@ create extension if not exists "uuid-ossp";
 create table if not exists profiles (
   id uuid references auth.users on delete cascade primary key,
   full_name text,
+  phone_number text,
   role text default 'customer' check (role in ('customer', 'admin')),
   created_at timestamptz default now()
 );
@@ -153,8 +154,12 @@ create policy "Service role can manage order items" on order_items
 create or replace function handle_new_user()
 returns trigger as $$
 begin
-  insert into public.profiles (id, full_name)
-  values (new.id, new.raw_user_meta_data->>'full_name');
+  insert into public.profiles (id, full_name, phone_number)
+  values (
+    new.id,
+    new.raw_user_meta_data->>'full_name',
+    new.raw_user_meta_data->>'phone_number'
+  );
   return new;
 end;
 $$ language plpgsql security definer;

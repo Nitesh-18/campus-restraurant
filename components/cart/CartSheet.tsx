@@ -22,7 +22,7 @@ export default function CartSheet({ open, onClose }: CartSheetProps) {
   // Show toast and close sheet when checkout is successful
   useEffect(() => {
     if (checkoutSuccess) {
-      toast.success('Order placed successfully!');
+      // toast.success('Order placed successfully!');
       onClose();
       setCheckoutSuccess(false);
     }

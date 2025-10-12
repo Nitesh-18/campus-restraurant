@@ -11,8 +11,6 @@ export async function PATCH(
     
     // Get the current user
     const { data: { user }, error: userError } = await supabase.auth.getUser();
-    console.log("Look here - user data:");
-    console.log(user);
     // if (userError || !user) {
     //   return NextResponse.json(
     //     { error: 'Authentication required' },

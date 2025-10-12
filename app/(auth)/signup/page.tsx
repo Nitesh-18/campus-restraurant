@@ -14,7 +14,7 @@ export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createSupabaseClient();
@@ -24,7 +24,7 @@ export default function SignupPage() {
 
     // Validate mobile number (only digits and 10 characters)
     const mobileRegex = /^[0-9]{10}$/;
-    if (!mobileRegex.test(mobileNumber)) {
+    if (!mobileRegex.test(phoneNumber)) {
       toast.error('Please enter a valid 10-digit mobile number');
       return;
     }
@@ -32,32 +32,38 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-            mobile_number: mobileNumber,
-          },
-        },
+      // Call server endpoint to create user immediately without email confirmation
+      const res = await fetch('/api/auth/create-user-simple', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, full_name: fullName, phone_number: phoneNumber }),
       });
 
-      if (error) {
-        toast.error(error.message);
+      const json = await res.json();
+      if (!res.ok) {
+        toast.error(json?.error || 'Failed to create user');
         return;
       }
 
-      // ✅ Success message for the customer
-      toast.success(`Welcome ${fullName}! 🎉 Your account has been created successfully.`);
+      // Try to sign in the user immediately
+      try {
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInError) {
+          console.warn('Auto sign-in failed:', signInError);
+          toast.success(`Welcome ${fullName}! 🎉 Your account has been created. Please sign in.`);
+          router.push('/login');
+          return;
+        }
+      } catch (err) {
+        console.error('Auto sign-in error:', err);
+      }
 
-      // Optional message for the admin console/log
-      console.log(`New user signed up: ${fullName} (${mobileNumber})`);
-
-      // Redirect to home or login page
+      toast.success(`Welcome ${fullName}! 🎉 You are signed in.`);
+      console.log(`New user created and signed in: ${fullName} (${phoneNumber})`);
       router.push('/');
       router.refresh();
-    } catch (error) {
+    } catch (err) {
+      console.error('create-user-simple fetch error:', err);
       toast.error('An unexpected error occurred');
     } finally {
       setLoading(false);
@@ -88,15 +94,15 @@ export default function SignupPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="mobileNumber">Mobile Number</Label>
+              <Label htmlFor="phoneNumber">Mobile Number</Label>
               <Input
-                id="mobileNumber"
+                id="phoneNumber"
                 type="text"
                 placeholder="Enter 10-digit mobile number"
-                value={mobileNumber}
+                value={phoneNumber}
                 onChange={(e) => {
                   const value = e.target.value.replace(/[^0-9]/g, '');
-                  setMobileNumber(value);
+                  setPhoneNumber(value);
                 }}
                 maxLength={10}
                 required

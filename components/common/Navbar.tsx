@@ -15,6 +15,7 @@ export default function Navbar() {
   const { getItemCount } = useCart();
   const [showCart, setShowCart] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const router = useRouter();
   const itemCount = getItemCount();
 
@@ -100,36 +101,53 @@ export default function Navbar() {
 
             {/* User Menu */}
             {user ? (
-              <div className="flex items-center space-x-3">
-                <div className="hidden sm:block text-right">
-                  <p className="text-sm font-medium text-gray-900">
-                    {profile?.full_name || user.email}
-                  </p>
-                  {profile && (
-                    <p className="text-xs text-gray-500 capitalize">
-                      {profile.role}
-                    </p>
+              <div className="relative flex items-center space-x-3">
+                <div className="hidden sm:flex sm:items-center sm:space-x-2">
+                  <div className="text-right">
+                    <p className="text-sm font-medium text-gray-900">{profile?.full_name || user.email}</p>
+                    {profile && <p className="text-xs text-gray-500 capitalize">{profile.role}</p>}
+                  </div>
+                </div>
+
+                <div className="relative" tabIndex={0} onBlur={() => setShowUserMenu(false)}>
+                  <button
+                    aria-label="User menu"
+                    onClick={() => setShowUserMenu((s) => !s)}
+                    className="p-2 rounded-full hover:bg-gray-100"
+                  >
+                    <User className="w-5 h-5 text-gray-700" />
+                  </button>
+
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md z-50">
+                      <ul>
+                        <li>
+                          <Link href="/change-password" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Change Password</Link>
+                        </li>
+                        <li>
+                          <button
+                            className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                            onClick={async () => {
+                              setSigningOut(true);
+                              try {
+                                await signOut();
+                                toast.success('Signed out successfully');
+                                router.push('/');
+                              } catch (err) {
+                                console.error("[Navbar] Sign out failed:", err);
+                                toast.error('Failed to sign out');
+                              } finally {
+                                setSigningOut(false);
+                              }
+                            }}
+                          >
+                            {signingOut ? 'Signing Out...' : 'Sign Out'}
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
                   )}
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  disabled={signingOut}
-                  onClick={async () => {
-                    setSigningOut(true);
-                    try {
-                      await signOut();
-                      toast.success('Signed out successfully');
-                      router.push('/');
-                    } catch (err) {
-                      console.error("[Navbar] Sign out failed:", err);
-                      toast.error('Failed to sign out');
-                    } finally {
-                      setSigningOut(false);
-                    }
-                  }}>
-                  {signingOut ? 'Signing Out...' : 'Sign Out'}
-                </Button>
               </div>
             ) : (
               <div className="flex items-center space-x-2">
